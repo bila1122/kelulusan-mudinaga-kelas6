@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pengumuman Kelulusan MI Muhammadiyah Cindaga 2024/2025</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f4f8;
+      text-align: center;
+      padding: 40px;
+    }
+    img.logo {
+      width: 100px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      color: #2b6cb0;
+      margin-bottom: 10px;
+    }
+    .form-group {
+      margin: 20px auto;
+    }
+    input {
+      padding: 10px;
+      margin: 10px;
+      width: 250px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #2b6cb0;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      display: none;
+    }
+    .congrats {
+      font-size: 32px;
+      color: #ff4081;
+      animation: pop 1s ease-out infinite alternate;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    @keyframes pop {
+      0% { transform: scale(1); opacity: 0.7; }
+      100% { transform: scale(1.2); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <img src="https://iili.io/FHWE5wg.png" alt="Logo Sekolah" class="logo" />
+  <h1>Pengumuman Kelulusan</h1>
+  <h2>MI Muhammadiyah Cindaga<br>Tahun Pelajaran 2024/2025</h2>
+
+  <div class="form-group">
+    <input type="text" id="nama" placeholder="Masukkan Nama Lengkap" />
+    <input type="date" id="tglLahir" />
+    <br>
+    <button onclick="cekKelulusan()">Cek Kelulusan</button>
+  </div>
+
+  <div class="result" id="hasil"></div>
+
+  <audio id="soundLulus" src="https://www.myinstants.com/media/sounds/tada-fanfare.mp3"></audio>
+
+  <script>
+    const dataSiswa = [
+      { nama: "ANNAS FAIS PRASETYO", nisn: "0124517649", tgl: "2012-09-17", status: "LULUS" },
+      { nama: "ANNISA NADA WIDYA KIRANA", nisn: "3138249502", tgl: "2013-02-05", status: "LULUS" },
+      { nama: "AQILLA KHOIRUNNISA", nisn: "0137786149", tgl: "2013-03-08", status: "LULUS" },
+      { nama: "ASQI NUR ILMI", nisn: "0127561555", tgl: "2012-07-03", status: "LULUS" },
+      { nama: "AURORA LOVE VITHA", nisn: "0135127439", tgl: "2013-02-03", status: "TIDAK LULUS" },
+      { nama: "CANDRA DWI PRASETYO", nisn: "3133768157", tgl: "2013-05-21", status: "TIDAK LULUS" },
+      { nama: "DAFFA SAKTI ALVARO", nisn: "3127233047", tgl: "2012-05-21", status: "LULUS" },
+      { nama: "ENJI WIDIANINGSIH", nisn: "0138355036", tgl: "2013-05-12", status: "LULUS" },
+      { nama: "FADHIL AVICENNA", nisn: "3124253684", tgl: "2012-11-07", status: "LULUS" },
+      { nama: "JANEDA PUTRI SASMITA", nisn: "0139619845", tgl: "2013-01-01", status: "TIDAK LULUS" },
+      { nama: "LANGGENG ALDI SAPUTRA", nisn: "3122983821", tgl: "2012-04-24", status: "LULUS" },
+      { nama: "MUHAMMAD HUDZAIFAH ZULFIKAR", nisn: "0129661606", tgl: "2012-12-26", status: "LULUS" },
+      { nama: "NAUFAL LUKITA WIRATAMA", nisn: "0126824797", tgl: "2012-08-05", status: "LULUS" },
+      { nama: "NAZLAN ARIF AMRULLOH", nisn: "0132988364", tgl: "2013-08-23", status: "LULUS" },
+      { nama: "RAHMA JULIANTI", nisn: "0139417714", tgl: "2013-07-28", status: "LULUS" },
+      { nama: "RENALDY", nisn: "0135398689", tgl: "2013-02-01", status: "LULUS" },
+      { nama: "RIFAI AL MAHMUD", nisn: "3122547453", tgl: "2012-11-28", status: "LULUS" },
+      { nama: "SATRIA WIRATARA KAUTSAR", nisn: "0127556631", tgl: "2012-12-12", status: "LULUS" },
+      { nama: "SHAFI RAJENDRA", nisn: "3123997850", tgl: "2012-10-04", status: "LULUS" },
+      { nama: "TEGAR TRI JUNIANTO", nisn: "0133910074", tgl: "2013-06-03", status: "TIDAK LULUS" },
+      { nama: "TRI NAZRIL ILHAM", nisn: "3128258118", tgl: "2012-09-22", status: "TIDAK LULUS" },
+      { nama: "USTMAN ABDI SALAM", nisn: "3126752016", tgl: "2013-05-31", status: "LULUS" },
+      { nama: "UWAIS ALFAQIH", nisn: "3131929666", tgl: "2013-07-07", status: "LULUS" }
+    ];
+
+    function cekKelulusan() {
+      const inputNama = document.getElementById("nama").value.trim().toUpperCase();
+      const inputTgl = document.getElementById("tglLahir").value;
+      const hasil = document.getElementById("hasil");
+      const audio = document.getElementById("soundLulus");
+
+      const siswa = dataSiswa.find(s =>
+        s.nama === inputNama && s.tgl === inputTgl
+      );
+
+      if (siswa) {
+        let html = `
+          <h2>Hasil Kelulusan</h2>
+          <p><strong>Nama:</strong> ${siswa.nama}</p>
+          <p><strong>NISN:</strong> ${siswa.nisn}</p>
+          <p><strong>Tanggal Lahir:</strong> ${new Date(siswa.tgl).toLocaleDateString('id-ID')}</p>
+          <p><strong>Status:</strong> <span style="color:${siswa.status === 'LULUS' ? 'green' : 'red'}">${siswa.status}</span></p>
+        `;
+
+        if (siswa.status === "LULUS") {
+          html += `<div class="congrats">🎉 Selamat! 🎉</div>`;
+          confetti({
+            particleCount: 200,
+            spread: 100,
+            origin: { y: 0.6 }
+          });
+          audio.play();
+        }
+
+        hasil.innerHTML = html;
+      } else {
+        hasil.innerHTML = `<p style="color:red;"><strong>Data tidak ditemukan. Periksa kembali nama dan tanggal lahir.</strong></p>`;
+      }
+
+      hasil.style.display = "block";
+    }
+  </script>
+</body>
+</html>
